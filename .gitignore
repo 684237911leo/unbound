@@ -1,0 +1,14 @@
+node_modules/
+dist/
+builds/
+coverage/
+*.log
+.DS_Store
+# Android (Capacitor) build outputs
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/capacitor-cordova-android-plugins/build/
+android/app/src/main/assets/public/
+.idea/
