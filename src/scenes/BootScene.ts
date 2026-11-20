@@ -6,6 +6,8 @@ export class BootScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.scene.start('PreloadScene');
+    // Отладочный вход: ?scene=combat открывает боевую арену, обычный поток не меняется.
+    const target = new URLSearchParams(window.location.search).get('scene') === 'combat' ? 'CombatSandboxScene' : undefined;
+    this.scene.start('PreloadScene', { next: target });
   }
 }

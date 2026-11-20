@@ -5,8 +5,9 @@ import { PreloadScene } from './scenes/PreloadScene';
 import { MainMenuScene } from './scenes/MainMenuScene';
 import { NameEntryScene } from './scenes/NameEntryScene';
 import { DeckScene } from './scenes/DeckScene';
+import { CombatSandboxScene } from './scenes/CombatSandboxScene';
 
-const game = new Phaser.Game(createGameConfig([BootScene, PreloadScene, MainMenuScene, NameEntryScene, DeckScene]));
+const game = new Phaser.Game(createGameConfig([BootScene, PreloadScene, MainMenuScene, NameEntryScene, DeckScene, CombatSandboxScene]));
 
 // Отладочный доступ для Playwright-проверок (fps, положение игрока). На геймплей не влияет.
 (window as unknown as { __game: Phaser.Game }).__game = game;

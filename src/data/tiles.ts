@@ -42,6 +42,14 @@ export const HEROINE: FrameRef = { texture: SHEETS.dungeon, frame: 99 };
 /** Матрос: бородатый мужчина Tiny Dungeon. */
 export const SAILOR: FrameRef = { texture: SHEETS.dungeon, frame: 86 };
 
+/** Стражники-матросы (бой): два разных мужских персонажа Tiny Dungeon. */
+export const GUARD_A: FrameRef = { texture: SHEETS.dungeon, frame: 85 };
+export const GUARD_B: FrameRef = { texture: SHEETS.dungeon, frame: 88 };
+/** Капитан: седой суровый боец Tiny Dungeon (отличается от матросов). */
+export const CAPTAIN: FrameRef = { texture: SHEETS.dungeon, frame: 100 };
+/** Сабля героини (спрайт меча Tiny Dungeon; вертикальный, остриём вверх). */
+export const SABER: FrameRef = { texture: SHEETS.dungeon, frame: 104 };
+
 /** Кадры процедурного листа ship-gen (имена, а не индексы). */
 export const SHIP_GEN_FRAMES = ['plank_a', 'plank_b', 'plank_c', 'water_a', 'water_b'] as const;
 

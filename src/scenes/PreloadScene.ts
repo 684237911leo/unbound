@@ -7,6 +7,12 @@ export class PreloadScene extends Phaser.Scene {
     super('PreloadScene');
   }
 
+  private next = 'MainMenuScene';
+
+  init(data: { next?: string }): void {
+    this.next = data?.next ?? 'MainMenuScene';
+  }
+
   preload(): void {
     const { width, height } = this.scale;
     const barWidth = Math.round(width * 0.66);
@@ -46,6 +52,6 @@ export class PreloadScene extends Phaser.Scene {
   create(): void {
     // Тайлы корабля, которых нет в паках, рисуются кодом (см. ASSETS.md «Пробелы»).
     generateShipTextures(this);
-    this.scene.start('MainMenuScene');
+    this.scene.start(this.next);
   }
 }
