@@ -28,7 +28,9 @@ export class MenuButton {
       .text(0, 0, label, { fontFamily: 'monospace', fontSize: `${fontSize}px`, color: '#e8d9a8' })
       .setOrigin(0.5);
     this.container = scene.add.container(x, y, [bg, this.text]);
-    this.hit = new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h);
+    // Phaser проверяет попадание в контейнер в координатах с учётом displayOrigin (w/2, h/2),
+    // поэтому зона нажатия задаётся от левого верхнего угла (0, 0), а не от центра.
+    this.hit = new Phaser.Geom.Rectangle(0, 0, w, h);
     this.container.setSize(w, h);
     this.container.on(Phaser.Input.Events.POINTER_OVER, () => this.enabled && this.text.setColor('#ffffff'));
     this.container.on(Phaser.Input.Events.POINTER_OUT, () => this.text.setColor('#e8d9a8'));

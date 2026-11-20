@@ -52,7 +52,7 @@ unbound/
 │   ├── third_party/<автор>-<пак>/    сторонние CC0-листы (см. «Ресурсы»)
 │   └── audio/, sprites/, tilesets/   каждая папка содержит только .gitkeep
 ├── scripts/build-apk.sh              сборка и проверка APK (см. BUILD.md)
-├── releases/                         выпущенные APK (UNBOUND-v0.1.0.apk, UNBOUND-v0.2.0.apk) и last-release.json
+├── releases/                         выпущенные APK (UNBOUND-v0.1.0.apk, UNBOUND-v0.2.1.apk) и last-release.json
 ├── android-signing/                  постоянный ключ подписи (см. SIGNING.md)
 │   ├── unbound-release.jks           keystore
 │   └── keystore.properties           конфигурация подписи (содержит пароли: не копировать в документы)
@@ -152,8 +152,8 @@ unbound/
 ## Android и сборка
 
 - **applicationId:** `com.unbound.game` (не меняется).
-- **versionName / versionCode:** задаются только в `version.json` (сейчас 0.2.0 / 2). Читаются `android/app/build.gradle`, `vite.config.ts` и скриптом сборки.
+- **versionName / versionCode:** задаются только в `version.json` (сейчас 0.2.1 / 3). Читаются `android/app/build.gradle`, `vite.config.ts` и скриптом сборки.
 - **Ключ подписи:** `android-signing/unbound-release.jks`, alias `unbound`. Конфигурация — `android-signing/keystore.properties`. Пароли и содержимое файла в документах не приводятся. SHA-256 сертификата совпадает с 0.1.0, поэтому 0.2.0 ставится поверх 0.1.0.
-- **Выпуск:** `releases/UNBOUND-v0.2.0.apk`, метаданные — `releases/last-release.json`.
+- **Выпуск:** `releases/UNBOUND-v0.2.1.apk`, метаданные — `releases/last-release.json`.
 - **Процесс сборки и выпуска:** [BUILD.md](BUILD.md).
 - **Правила подписи и способ установки APK на телефон:** [SIGNING.md](SIGNING.md).

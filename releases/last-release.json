@@ -1,7 +1,7 @@
 {
-  "versionName": "0.2.0",
-  "versionCode": 2,
+  "versionName": "0.2.1",
+  "versionCode": 3,
   "certSha256": "341ae69eb885b3522023fad599729950b0541abdea299896a5c9163f14b3dad2",
-  "builtAt": "2026-11-20T16:14:38Z",
-  "sizeBytes": 3695041
+  "builtAt": "2026-11-20T18:07:22Z",
+  "sizeBytes": 3695045
 }
