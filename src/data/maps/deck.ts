@@ -1,0 +1,145 @@
+import type { NavGrid } from '../../systems/navigation/grid';
+import type { TileKey } from '../tiles';
+
+// Палуба: 14×32 тайла (224×512 px). Мостик с каютой — вверху, нос — внизу.
+export const DECK_TILE = 16;
+
+type Legend<T extends string> = Record<string, T | null>;
+
+function parse<T extends string>(rows: string[], legend: Legend<T>): (T | null)[][] {
+  return rows.map((row, y) =>
+    [...row].map((ch, x) => {
+      if (!(ch in legend)) throw new Error(`deck map: unknown char "${ch}" at ${x},${y}`);
+      return legend[ch];
+    }),
+  );
+}
+
+// Земля: ~ вода, D — доски палубы (вариант выбирается детерминированно по координатам).
+const GROUND_ROWS = [
+  '~~~~~~~~~~~~~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~DDDDDDDDDD~~',
+  '~~~~~~~~~~~~~~',
+  '~~~~~~~~~~~~~~',
+];
+
+// Объекты (все непроходимы): борта, стена каюты с дверью, бочки и ящики.
+// Борта: Q W E — левый/правый угол и перекладина; | — вертикальный борт.
+const OBJECT_ROWS = [
+  '..............',
+  '..Q--------E..',
+  '..|.lwwwwr.|..',
+  '..|.wcWDdc.|..',
+  '..|........|..',
+  '..|........|..',
+  '..|B.......|..',
+  '..|B.......|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|.......B|..',
+  '..|......BB|..',
+  '..|........|..',
+  '..|XX......|..',
+  '..|.X......|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..|........|..',
+  '..A--------S..',
+  '..............',
+  '..............',
+];
+
+export const DECK_COLS = GROUND_ROWS[0].length;
+export const DECK_ROWS = GROUND_ROWS.length;
+
+export const DECK_GROUND: TileKey[][] = parse<TileKey>(GROUND_ROWS, {
+  '~': 'water_a',
+  D: 'deck_a',
+}) as TileKey[][];
+
+export const DECK_OBJECTS: (TileKey | null)[][] = parse<TileKey>(OBJECT_ROWS, {
+  '.': null,
+  Q: 'rail_corner_tl',
+  E: 'rail_corner_tr',
+  A: 'rail_corner_bl',
+  S: 'rail_corner_br',
+  '-': 'rail_h',
+  '|': 'rail_v',
+  l: 'cabin_wall_left',
+  r: 'cabin_wall_right',
+  w: 'cabin_wall',
+  c: 'cabin_window',
+  W: 'cabin_door_left',
+  D: 'cabin_door_right',
+  d: 'cabin_wall',
+  B: 'barrel',
+  X: 'crate',
+});
+
+/** Крупные объекты поверх сетки. col/row — левый верхний тайл. */
+export const DECK_PROPS = [{ kind: 'mast', col: 6, row: 13, w: 2, h: 2 }] as const;
+
+/** Игрок появляется внизу палубы (в тайлах). */
+export const DECK_PLAYER_START = { col: 6.5, row: 27 };
+/** Матрос стоит на палубе (в тайлах). */
+export const DECK_SAILOR_POS = { col: 8.5, row: 21 };
+export const DECK_WORLD_ZOOM = 2;
+
+/**
+ * Единый источник проходимости: вода, любой объект, мачта и матрос блокируют клетку.
+ * По этой сетке строятся и физические коллайдеры сцены, и поиск пути.
+ */
+export function buildDeckNavGrid(): NavGrid {
+  const blocked: boolean[][] = [];
+  for (let row = 0; row < DECK_ROWS; row++) {
+    const line: boolean[] = [];
+    for (let col = 0; col < DECK_COLS; col++) {
+      line.push(DECK_GROUND[row][col] !== 'deck_a' || DECK_OBJECTS[row][col] !== null);
+    }
+    blocked.push(line);
+  }
+  for (const p of DECK_PROPS) {
+    for (let r = p.row; r < p.row + p.h; r++) for (let c = p.col; c < p.col + p.w; c++) blocked[r][c] = true;
+  }
+  blocked[Math.floor(DECK_SAILOR_POS.row)][Math.floor(DECK_SAILOR_POS.col)] = true;
+  return { cols: DECK_COLS, rows: DECK_ROWS, tile: DECK_TILE, blocked };
+}
