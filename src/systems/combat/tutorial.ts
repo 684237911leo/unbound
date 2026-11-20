@@ -67,7 +67,9 @@ export class TutorialRunner {
       const enabled = (id: EnemyId): boolean => step.enable === 'all' || step.enable.includes(id);
       for (const id of waveEnemies) host.setHeld(id, !enabled(id));
 
-      const down = new Set<EnemyId>();
+      // Враг мог быть вырублен раньше, чем начался шаг (удар по дуге задел обоих): считаем его уже вырубленным.
+      const alive = host.aliveEnemyIds();
+      const down = new Set<EnemyId>(waveEnemies.filter((id) => !alive.includes(id)));
       const windupSeen = new Set<EnemyId>();
       let dodged = false;
       let paused = false;

@@ -9,30 +9,13 @@ import {
 } from '../data/maps/combatRoom';
 import { HEROINE, TILES, type TileKey } from '../data/tiles';
 import { CombatController } from '../systems/combat/CombatController';
-import { type EncounterDef, CombatEncounter } from '../systems/combat/encounter';
-import { CABIN_TUTORIAL_STEPS } from '../systems/combat/tutorial';
+import { CombatEncounter } from '../systems/combat/encounter';
+import { CABIN_FIGHT } from '../data/encounters';
 import type { EnemyId } from '../data/enemies';
 import { Player } from '../systems/player/Player';
 import { HintPanel } from '../ui/HintPanel';
 
 const T = ROOM_TILE;
-
-/** Схватка в каюте: стражники (обучение) → капитан. Определение схватки не зависит от сцены. */
-export const CABIN_FIGHT: EncounterDef = {
-  id: 'cabin_fight',
-  heroineStart: 'heroine',
-  healBetweenWaves: true,
-  waves: [
-    {
-      enemies: [
-        { id: 'guard_tutorial_1', spawn: 'door', stand: 'guard_a' },
-        { id: 'guard_tutorial_2', spawn: 'door', stand: 'guard_b' },
-      ],
-    },
-    { enemies: [{ id: 'captain', spawn: 'door', stand: 'captain' }] },
-  ],
-  tutorial: CABIN_TUTORIAL_STEPS,
-};
 
 /** Тестовая арена боя: комната ~12×14 тайлов. Открывается по `?scene=combat`. */
 export class CombatSandboxScene extends Phaser.Scene {

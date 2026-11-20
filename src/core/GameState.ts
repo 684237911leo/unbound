@@ -41,8 +41,20 @@ export function createInitialState(): GameState {
 
 /** Дополняет состояние полями, которых могло не быть в старом сохранении (та же версия формата). */
 export function withDefaults(state: GameState): GameState {
+  const base = createInitialState();
+  const obj = <T extends object>(v: unknown, fallback: T): T =>
+    typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as T) : fallback;
   return {
+    ...base,
     ...state,
     heroName: typeof state.heroName === 'string' ? state.heroName : '',
+    gold: typeof state.gold === 'number' && Number.isFinite(state.gold) ? state.gold : 0,
+    flags: obj(state.flags, base.flags),
+    inventory: Array.isArray(state.inventory) ? state.inventory : [],
+    quests: obj(state.quests, base.quests),
+    crew: Array.isArray(state.crew) ? state.crew : [],
+    reputation: obj(state.reputation, base.reputation),
+    discoveredLocations: Array.isArray(state.discoveredLocations) ? state.discoveredLocations : [],
+    location: state.location ?? null,
   };
 }

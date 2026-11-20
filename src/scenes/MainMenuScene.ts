@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { continueGame, hasSave } from '../core/session';
+import { sceneForState } from '../core/prologue';
 import { MenuButton } from '../ui/MenuButton';
 import { RainEffect } from '../ui/RainEffect';
 
@@ -156,7 +157,7 @@ export class MainMenuScene extends Phaser.Scene {
     void continueGame().then((state) => {
       if (!this.alive) return;
       if (state) {
-        this.scene.start('DeckScene');
+        this.scene.start(sceneForState(state));
         return;
       }
       // Сохранение не читается (повреждено). Кнопку прячем; сырые данные SaveSystem уже сохранил в .corrupt.

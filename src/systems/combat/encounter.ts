@@ -52,6 +52,8 @@ export class CombatEncounter {
   private tutorialDone: boolean;
   private tutorial: TutorialRunner | null = null;
   private aborted = false;
+  /** Первая волна уже выпущена сценой (стражники вошли до начала боя): в первой попытке её не создаём заново. */
+  private adopt = false;
 
   constructor(
     private readonly combat: CombatController,
@@ -60,6 +62,14 @@ export class CombatEncounter {
     private readonly hint: HintApi,
   ) {
     this.tutorialDone = !def.tutorial || def.tutorial.length === 0;
+  }
+
+  /**
+   * Сцена уже создала врагов первой волны (с held: true) и привела героиню в точку heroineStart:
+   * первая попытка использует их, а не выпускает заново. Повторные попытки (после поражения) идут как обычно.
+   */
+  adoptFirstWave(): void {
+    this.adopt = true;
   }
 
   /** Запускает схватку; промис разрешается 'won', когда повержены все волны. Поражения перезапускают её сами. */
@@ -92,7 +102,9 @@ export class CombatEncounter {
   private async attemptOnce(): Promise<'won' | 'lost'> {
     const combat = this.combat;
     const useTutorial = !this.tutorialDone;
-    combat.clearEnemies();
+    const adopt = this.adopt;
+    this.adopt = false;
+    if (!adopt) combat.clearEnemies();
     combat.resetHeroine(this.point(this.def.heroineStart));
     this.hint.hide();
 
@@ -123,7 +135,7 @@ export class CombatEncounter {
         const wave = this.def.waves[w];
         if (w > 0) this.tutorialDone = true; // дошли до основного боя: при поражении обучение не повторяется
         const scripted = useTutorial && this.def.tutorial!.some((s) => s.wave === w);
-        for (const we of wave.enemies) {
+        for (const we of adopt && w === 0 ? [] : wave.enemies) {
           const from = this.point(we.spawn);
           combat.spawnEnemy(we.id, from, {
             walkTo: we.stand ? this.point(we.stand) : undefined,

@@ -54,6 +54,7 @@ export function buildRoomNavGrid(): NavGrid {
 /** Именованные точки (мир, px): дверь, где входят враги, стойки стражников, старт героини. */
 export const ROOM_POINTS: Record<string, Point> = {
   door: { x: 6 * ROOM_TILE, y: 2.6 * ROOM_TILE },
+  desk: { x: 6 * ROOM_TILE, y: 2.6 * ROOM_TILE },
   guard_a: { x: 4.5 * ROOM_TILE, y: 5.5 * ROOM_TILE },
   guard_b: { x: 7.5 * ROOM_TILE, y: 5 * ROOM_TILE },
   captain: { x: 6 * ROOM_TILE, y: 4.5 * ROOM_TILE },

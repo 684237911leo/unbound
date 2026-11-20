@@ -45,6 +45,11 @@ export class InteractionSystem {
     this.items.push(item);
   }
 
+  /** Зарегистрированные объекты (для отладочного снимка). */
+  list(): readonly Interactable[] {
+    return this.items;
+  }
+
   get current(): Interactable | null {
     return this._current;
   }
