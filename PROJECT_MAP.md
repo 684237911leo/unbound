@@ -106,7 +106,9 @@ unbound/
 
 ## Ресурсы
 
-- `public/assets/sprites/`, `tilesets/`, `audio/` — пустые (только `.gitkeep`). Настоящей графики и звука пока нет.
+- `public/assets/third_party/<автор>-<пак>/` — бесплатные CC0-листы спрайтов (Kenney Tiny Town, Tiny Dungeon, Roguelike RPG/Indoor/Characters, Majadroid Tiny Islands). Описание, сетки и пробелы — **ASSETS.md**. Основной стиль — Kenney Tiny.
+- `public/assets/sprites/`, `tilesets/`, `audio/` — пока пустые (только `.gitkeep`), для своих/доработанных ресурсов. Звука пока нет.
+- В игру ассеты ещё не подключены.
 - Заглушки в `PreloadScene.generatePlaceholderTextures()`:
   - `heroine` — 16×24, тёмно-красный прямоугольник;
   - `tile-deck` — 16×16, коричневая доска с полосой.
