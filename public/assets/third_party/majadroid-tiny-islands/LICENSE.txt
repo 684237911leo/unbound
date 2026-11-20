@@ -1,0 +1,7 @@
+Источник: https://opengameart.org/content/tiny-islands-16x16-tilemap
+Название: Tiny Islands - 16x16 Tilemap (tilemap.png)
+Автор: Majadroid (Maik Hoffmann), https://majadroid.itch.io/ , https://opengameart.org/users/majadroid
+Лицензия: CC0 1.0 Universal (Public Domain Dedication)
+  https://creativecommons.org/publicdomain/zero/1.0/
+Лицензия указана в поле License на странице OpenGameArt (проверено 2026-11-20).
+В архиве автора есть INFO.txt с просьбой поддержать автора (Patreon): http://patreon.com/majadroid - не обязательно.

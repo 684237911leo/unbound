@@ -1,0 +1,31 @@
+Источник: https://opengameart.org/content/roguelike-character-pack
+Название: Roguelike Characters pack
+Автор: Kenney Vleugels for Kenney (www.kenney.nl)
+Лицензия: CC0 1.0 Universal (Public Domain Dedication)
+  https://creativecommons.org/publicdomain/zero/1.0/
+Лицензия указана в поле License на странице OpenGameArt (проверено 2026-11-20).
+
+---- Текст лицензии/README из архива автора ----
+
+
+###############################################################################
+
+
+	Roguelike Characters pack
+	by Kenney Vleugels for Kenney (www.kenney.nl)
+
+			------------------------------
+
+	License (Creative Commons Zero, CC0)
+	http://creativecommons.org/publicdomain/zero/1.0/
+
+	You may use these graphics in personal and commercial projects.
+	Credit (Kenney or www.kenney.nl) would be nice but is not mandatory.
+
+			------------------------------
+
+	Donate:   http://donate.kenney.nl/
+	Request:  http://request.kenney.nl/
+
+
+###############################################################################
