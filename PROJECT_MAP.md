@@ -19,7 +19,7 @@ unbound/
 ├── src/
 │   ├── main.ts                       создаёт Phaser.Game, список сцен
 │   ├── vite-env.d.ts                 типы __APP_VERSION__ и __APP_VERSION_CODE__
-│   ├── config/game.ts                размер 640×360, конфиг Phaser (pixelArt, FIT, arcade)
+│   ├── config/game.ts                размер 360×640, конфиг Phaser (pixelArt, FIT, arcade)
 │   ├── core/                         ядро без логики игры
 │   │   ├── EventBus.ts               типизированная шина событий
 │   │   ├── GameState.ts              сериализуемое состояние игры (интерфейс + начальное значение)
@@ -43,7 +43,7 @@ unbound/
 │   └── keystore.properties           конфигурация подписи (содержит пароли: не копировать в документы)
 └── android/                          Capacitor-проект Android (Gradle)
     ├── app/build.gradle              applicationId, версия из version.json, signingConfig release
-    ├── app/src/main/AndroidManifest.xml   активность, ориентация sensorLandscape, INTERNET
+    ├── app/src/main/AndroidManifest.xml   активность, ориентация portrait, INTERNET
     ├── app/src/main/java/com/unbound/game/MainActivity.java   полноэкранный режим (immersive)
     ├── app/src/main/res/values/styles.xml    тема приложения и тема splash
     ├── variables.gradle              minSdk 24, compileSdk/targetSdk 36, версии библиотек
@@ -61,7 +61,7 @@ unbound/
 | EventBus | `src/core/EventBus.ts` | Типизированная шина событий; экземпляр `eventBus`. События: `gold:changed`, `flag:set` | — | готов, 8 тестов |
 | GameState | `src/core/GameState.ts` | Интерфейс `GameState`, `createInitialState()`. Только данные | — | готов, тестов нет |
 | SaveSystem | `src/core/SaveSystem.ts` | `save/load/hasSave/deleteSave`, envelope с `saveVersion`, миграции, `.backup`/`.corrupt` | GameState, `@capacitor/preferences` | готов, 11 тестов; в сцены не подключён |
-| Game config | `src/config/game.ts` | Размер 640×360, `createGameConfig()` | phaser | готов |
+| Game config | `src/config/game.ts` | Размер 360×640, `createGameConfig()` | phaser | готов |
 | Version | `vite.config.ts` (`define`) | `__APP_VERSION__`, `__APP_VERSION_CODE__` из `version.json` | `version.json` | готов |
 | BootScene | `src/scenes/BootScene.ts` | Сразу переходит в PreloadScene | Phaser | готов |
 | PreloadScene | `src/scenes/PreloadScene.ts` | Прогресс-бар, заглушечные текстуры `heroine`, `tile-deck` | config | готов (заглушки) |

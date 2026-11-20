@@ -20,10 +20,11 @@ export class MainMenuScene extends Phaser.Scene {
 
     this.createRain();
 
+    // Portrait layout: title in the upper third, button near the lower-middle for thumb reach.
     this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.36, 'UNBOUND', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.22, 'UNBOUND', {
         fontFamily: 'monospace',
-        fontSize: '56px',
+        fontSize: '48px',
         fontStyle: 'bold',
         color: '#e8d9a8',
         stroke: '#2a1a0c',
@@ -32,7 +33,7 @@ export class MainMenuScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.52, 'Последний приказ', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.22 + 44, 'Последний приказ', {
         fontFamily: 'monospace',
         fontSize: '16px',
         color: '#8a94ad',
@@ -40,18 +41,18 @@ export class MainMenuScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     const button = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.7, 'Начать', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.63, 'Начать', {
         fontFamily: 'monospace',
-        fontSize: '20px',
+        fontSize: '24px',
         color: '#e8d9a8',
         backgroundColor: '#1d2538',
-        padding: { left: 24, right: 24, top: 8, bottom: 8 },
+        padding: { left: 56, right: 56, top: 14, bottom: 14 },
       })
       .setOrigin(0.5)
       .setInteractive({ useHandCursor: true });
 
     const notice = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.84, '', {
+      .text(GAME_WIDTH / 2, GAME_HEIGHT * 0.72, '', {
         fontFamily: 'monospace',
         fontSize: '14px',
         color: '#c9a227',
@@ -85,6 +86,9 @@ export class MainMenuScene extends Phaser.Scene {
       if (drop.line.y > GAME_HEIGHT + 10) {
         drop.line.y = -10;
         drop.line.x = Math.random() * (GAME_WIDTH + 80);
+      } else if (drop.line.x < -10) {
+        // Drift pushes drops off the left edge; wrap them back in from the right.
+        drop.line.x = GAME_WIDTH + Math.random() * 40;
       }
     }
   }

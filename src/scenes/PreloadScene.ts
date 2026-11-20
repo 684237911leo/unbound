@@ -7,10 +7,10 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
-    const barWidth = 240;
+    const barWidth = Math.round(GAME_WIDTH * 0.66);
     const barHeight = 12;
     const x = (GAME_WIDTH - barWidth) / 2;
-    const y = GAME_HEIGHT / 2 + 20;
+    const y = Math.round(GAME_HEIGHT * 0.55);
 
     const frame = this.add.graphics();
     frame.lineStyle(2, 0x3a4560, 1);

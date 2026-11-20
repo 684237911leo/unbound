@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
-export const GAME_WIDTH = 640;
-export const GAME_HEIGHT = 360;
+export const GAME_WIDTH = 360;
+export const GAME_HEIGHT = 640;
 
 export function createGameConfig(
   scenes: Phaser.Types.Scenes.SceneType[],
