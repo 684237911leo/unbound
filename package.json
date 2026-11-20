@@ -8,9 +8,15 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "apk:debug": "bash scripts/build-apk.sh debug",
+    "apk:release": "bash scripts/build-apk.sh release"
   },
   "dependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/cli": "8.6.2",
+    "@capacitor/core": "8.6.2",
+    "@capacitor/preferences": "8.0.1",
     "phaser": "3.90.0"
   },
   "devDependencies": {
