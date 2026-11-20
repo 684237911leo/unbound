@@ -15,8 +15,9 @@ import { HEROINE, MAST_TEXTURE, SAILOR, TILES, type TileKey } from '../data/tile
 import { InputController } from '../systems/input/InputController';
 import { type Interactable, InteractionSystem } from '../systems/interaction/InteractionSystem';
 import { PathFollower } from '../systems/navigation/follower';
-import { type NavGrid, type Point, findPath } from '../systems/navigation/grid';
+import { type NavGrid, type Point, findPath, pointClear } from '../systems/navigation/grid';
 import { PLAYER_SPEED, Player } from '../systems/player/Player';
+import { autosave, getState, setLocation } from '../core/session';
 import { MessageBox } from '../ui/MessageBox';
 import { RainEffect } from '../ui/RainEffect';
 
@@ -27,6 +28,8 @@ const DEPTH_GROUND = -1000;
 const BODY_RADIUS = 5;
 /** Как часто (мс) при перетаскивании пересчитывается маршрут. */
 const DRAG_REPATH_MS = 80;
+/** Как часто (мс) автосохранять положение героини. */
+const AUTOSAVE_MS = 30000;
 
 declare global {
   interface Window {
@@ -81,12 +84,8 @@ export class DeckScene extends Phaser.Scene {
     this.buildMap(walls);
     this.buildProps();
 
-    this.player = new Player(
-      this,
-      DECK_PLAYER_START.col * T,
-      DECK_PLAYER_START.row * T,
-      HEROINE,
-    );
+    const start = this.savedStart() ?? { x: DECK_PLAYER_START.col * T, y: DECK_PLAYER_START.row * T };
+    this.player = new Player(this, start.x, start.y, HEROINE);
     this.worldLayer.add([this.player.shadow, this.player.view]);
     this.physics.add.collider(this.player.body, walls);
 
@@ -128,6 +127,10 @@ export class DeckScene extends Phaser.Scene {
     });
     this.registerInteractables();
 
+    // Положение героини сохраняется раз в 30 с, при каждом взаимодействии и при уходе в фон.
+    this.time.addEvent({ delay: AUTOSAVE_MS, loop: true, callback: () => this.saveProgress() });
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
+
     // Лёгкое колыхание воды.
     let flip = false;
     this.time.addEvent({
@@ -155,6 +158,7 @@ export class DeckScene extends Phaser.Scene {
       this.input.off(Phaser.Input.Events.POINTER_UP_OUTSIDE, this.onPointerUp, this);
       this.input_.destroy();
       this.box.destroy();
+      document.removeEventListener('visibilitychange', this.onVisibilityChange);
       this.water = [];
       this.follower.cancel();
       this.pending = null;
@@ -193,6 +197,25 @@ export class DeckScene extends Phaser.Scene {
       this.interaction.trigger();
     }
   }
+
+  /** Сохранённая позиция из партии, если она проходима; иначе null (старт по умолчанию). */
+  private savedStart(): Point | null {
+    const loc = getState()?.location;
+    if (!loc || loc.scene !== 'DeckScene') return null;
+    if (!Number.isFinite(loc.x) || !Number.isFinite(loc.y)) return null;
+    if (!pointClear(this.nav, loc.x, loc.y, BODY_RADIUS)) return null;
+    return { x: loc.x, y: loc.y };
+  }
+
+  /** Записывает положение героини в партию и сохраняет на диск. */
+  private saveProgress(): void {
+    setLocation('DeckScene', this.player.x, this.player.y);
+    void autosave();
+  }
+
+  private readonly onVisibilityChange = (): void => {
+    if (document.visibilityState === 'hidden') this.saveProgress();
+  };
 
   /** Мир → экран (координаты интерфейсной камеры). */
   private worldToScreen(x: number, y: number): Point {
@@ -386,6 +409,7 @@ export class DeckScene extends Phaser.Scene {
   private registerInteractables(): void {
     const say = (text: string) => (): void => {
       this.box.show(text);
+      this.saveProgress();
     };
     this.interaction.register({
       id: 'cabin-door',

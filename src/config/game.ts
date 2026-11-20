@@ -29,6 +29,10 @@ export function createGameConfig(
     input: {
       activePointers: 3,
     },
+    // Нужен для поля ввода имени героини (нативная клавиатура Android, кириллица).
+    dom: {
+      createContainer: true,
+    },
     scene: scenes,
   };
 }

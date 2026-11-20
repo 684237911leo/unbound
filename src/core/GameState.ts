@@ -11,6 +11,8 @@ export interface QuestProgress {
 }
 
 export interface GameState {
+  /** Имя героини, введённое при новой игре. Пустая строка до ввода. */
+  heroName: string;
   gold: number;
   flags: Record<string, boolean>;
   inventory: InventoryItem[];
@@ -24,6 +26,7 @@ export interface GameState {
 
 export function createInitialState(): GameState {
   return {
+    heroName: '',
     gold: 0,
     flags: {},
     inventory: [],
@@ -33,5 +36,13 @@ export function createInitialState(): GameState {
     reputation: {},
     discoveredLocations: [],
     location: null,
+  };
+}
+
+/** Дополняет состояние полями, которых могло не быть в старом сохранении (та же версия формата). */
+export function withDefaults(state: GameState): GameState {
+  return {
+    ...state,
+    heroName: typeof state.heroName === 'string' ? state.heroName : '',
   };
 }

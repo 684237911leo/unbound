@@ -126,4 +126,14 @@ describe('SaveSystem', () => {
       expect(warn).toHaveBeenCalled();
     });
   });
+
+  it('fills heroName with empty string when a v1 save lacks it', async () => {
+    const { sys, adapter } = make();
+    const { heroName: _omit, ...withoutName } = createInitialState();
+    adapter.data.set(KEY, JSON.stringify({ saveVersion: 1, savedAt: 't', appVersion: 'o', state: withoutName }));
+    const loaded = await sys.load(1);
+    expect(loaded).not.toBeNull();
+    expect(loaded!.heroName).toBe('');
+    expect(loaded!.gold).toBe(0);
+  });
 });

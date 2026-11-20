@@ -1,4 +1,4 @@
-import type { GameState } from './GameState';
+import { type GameState, withDefaults } from './GameState';
 
 /** Minimal async key-value storage. */
 export interface StorageAdapter {
@@ -29,16 +29,20 @@ export const SAVE_KEY_PREFIX = 'unbound.save.';
 
 /** Default adapter: Capacitor Preferences (Android SharedPreferences; localStorage in browser). */
 export function createPreferencesAdapter(): StorageAdapter {
-  const prefs = () => import('@capacitor/preferences').then((m) => m.Preferences);
+  // Объект Preferences нельзя возвращать из промиса: в вебе у него есть then(), который бросает ошибку.
+  // Поэтому берём его внутри функции, без передачи через then/return.
   return {
     async get(key) {
-      return (await (await prefs()).get({ key })).value;
+      const { Preferences } = await import('@capacitor/preferences');
+      return (await Preferences.get({ key })).value;
     },
     async set(key, value) {
-      await (await prefs()).set({ key, value });
+      const { Preferences } = await import('@capacitor/preferences');
+      await Preferences.set({ key, value });
     },
     async remove(key) {
-      await (await prefs()).remove({ key });
+      const { Preferences } = await import('@capacitor/preferences');
+      await Preferences.remove({ key });
     },
   };
 }
@@ -149,7 +153,7 @@ export class SaveSystem {
       if (env.saveVersion < this.currentVersion) {
         return await this.migrateAndStore(key, slot, raw, env);
       }
-      return env.state;
+      return withDefaults(env.state);
     } catch (e) {
       this.warn(`SaveSystem: load failed for slot ${slot}: ${String(e)}`);
       return null;
